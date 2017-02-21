@@ -1,33 +1,30 @@
-let mongoose = require('mongoose');
+const express = require('express');
 
-// config mongoose to use promise instead of callback
-mongoose.Promise = global.Promise;
+const bodyParser = require('body-parser');
 
-mongoose.connect('mongodb://localhost:27017/TodoAppApi');
+const { mongoose } = require('./db/mongoose');
 
-let Todo = mongoose.model('Todo', {
-    text: {
-        type: String,
-        required: true
-    },
-    completed: {
-        type: Boolean,
-        required: true
-    },
-    completedAt: {
-        type: Number,
-        required: true
-    }
+const { User } = require('./models/user');
+
+const { Todo } = require('./models/todo');
+
+const port = process.env.PORT || 3333;
+
+let app = express();
+
+app.use(bodyParser.json());
+
+app.post('/todos', (req, res) => {
+    console.log('==== create todos =====');
+    let todo = new Todo({});
+
+    todo.save().then((doc) => {
+        res.status(200).send(doc);
+    }, (err) => {
+        res.status(400).send(err.errors.text.message);
+    });
 });
 
-let newTodo = new Todo({
-    text: "Learn ReactJs",
-    completed: false,
-    completedAt: 12313123
-});
-
-newTodo.save().then((doc) => {
-    console.log(JSON.stringify(doc, undefined, 2));
-}, (err) => {
-    console.log(JSON.stringify(err, undefined, 2));
+app.listen(port, () => {
+    console.log(`Server started on port ${port}`);
 });
