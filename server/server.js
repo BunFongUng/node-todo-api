@@ -44,7 +44,7 @@ app.get('/todos', (req, res) => {
 });
 
 //find todo by id
-app.get('/todo/:id', (req, res) => {
+app.get('/todos/:id', (req, res) => {
 
     if (!ObjectID.isValid(req.params.id)) {
         return res.status(404).send({
@@ -64,6 +64,8 @@ app.get('/todo/:id', (req, res) => {
             });
         }, (err) => {
             console.log('Unable to find todo by id.', err);
+        }).catch((e) => {
+            res.status(404).send();
         });
 })
 
