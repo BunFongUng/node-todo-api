@@ -1,5 +1,7 @@
 const express = require('express');
 
+const _ = require('lodash');
+
 const { ObjectID } = require('mongodb');
 
 const bodyParser = require('body-parser');
@@ -68,6 +70,83 @@ app.get('/todos/:id', (req, res) => {
             res.status(404).send();
         });
 })
+
+app.delete('/todos/:id', (req, res) => {
+    if (!ObjectID.isValid(req.params.id)) {
+        return res.status(404).send({
+            status: 'error',
+            message: 'Invalid todo id'
+        });
+    }
+
+    Todo.findByIdAndRemove(req.params.id)
+        .then((todo) => {
+            if (!todo) {
+                return res.status(404).send({
+                    'status': 'error',
+                    'message': 'Todo id not found.'
+                });
+            }
+
+            res.send({
+                'status': 'success',
+                todo
+            });
+        }, (err) => {
+            res.status(400).send({
+                'status': 'error',
+                'message': 'Unable to delete todo by id.'
+            });
+        }).catch((err) => {
+            res.status(404).send();
+        });
+});
+
+// update to todo by id
+
+app.patch('/todos/:id', (req, res) => {
+
+    let id = req.params.id;
+    let body = _.pick(req.body, ['text', 'completed']);
+
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send({
+            status: 'error',
+            message: 'Invalid todo id'
+        });
+    }
+
+    if (_.isBoolean(body.completed) && body.completed) {
+        body.completedAt = new Date().getTime();
+    } else {
+        body.completed = false;
+        body.completedAt = null;
+    }
+
+    Todo.findByIdAndUpdate(id, {
+        $set: body
+    }, {
+        new: true
+    }).then((todo) => {
+        if (!todo) {
+            return res.status(404).send({
+                status: 'error',
+                message: 'Todo not found'
+            });
+        }
+        res.send({
+            status: 'success',
+            message: 'Successfully updated todo',
+            todo
+        });
+
+    }).catch((e) => {
+        res.status(400).send({
+            status: 'error',
+            message: 'Unable to update todo by id'
+        });
+    });
+});
 
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);
