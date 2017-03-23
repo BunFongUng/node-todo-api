@@ -80,7 +80,7 @@ app.get('/todos/:id', authenticate, (req, res) => {
         });
 })
 
-app.delete('/todos/:id', (req, res) => {
+app.delete('/todos/:id', authenticate, (req, res) => {
     if (!ObjectID.isValid(req.params.id)) {
         return res.status(404).send({
             status: 'error',
@@ -88,7 +88,10 @@ app.delete('/todos/:id', (req, res) => {
         });
     }
 
-    Todo.findByIdAndRemove(req.params.id)
+    Todo.findOneAndRemove({
+            _id: req.params.id,
+            _creator: req.user._id
+        })
         .then((todo) => {
             if (!todo) {
                 return res.status(404).send({
@@ -113,7 +116,7 @@ app.delete('/todos/:id', (req, res) => {
 
 // update to todo by id
 
-app.patch('/todos/:id', (req, res) => {
+app.patch('/todos/:id', authenticate, (req, res) => {
 
     let id = req.params.id;
     let body = _.pick(req.body, ['text', 'completed']);
@@ -132,7 +135,10 @@ app.patch('/todos/:id', (req, res) => {
         body.completedAt = null;
     }
 
-    Todo.findByIdAndUpdate(id, {
+    Todo.findOneAndUpdate({
+        _id: id,
+        _creator: req.user._id
+    }, {
         $set: body
     }, {
         new: true
