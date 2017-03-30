@@ -1,32 +1,32 @@
 {
-  "name": "node-mongodb",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "mocha server/**/*.test.js",
-    "test-watch": "nodemon --exec 'npm test'",
-    "start": "NODE_ENV='production' node server/server.js"
-  },
-  "engines": {
-    "node": "6.9.1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.16.1",
-    "express": "^4.14.1",
-    "jsonwebtoken": "^7.3.0",
-    "lodash": "^4.17.4",
-    "mongodb": "^2.2.23",
-    "mongoose": "^4.8.3",
-    "validator": "^7.0.0"
-  },
-  "devDependencies": {
-    "expect": "^1.20.2",
-    "mocha": "^3.2.0",
-    "nodemon": "^1.11.0",
-    "supertest": "^3.0.0"
-  }
+    "name": "node-mongodb",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "mocha server/**/*.test.js",
+        "test-watch": "nodemon --exec 'npm test'",
+        "start": "NODE_ENV='production' node server/server.js"
+    },
+    "engines": {
+        "node": "6.9.1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.16.1",
+        "express": "^4.14.1",
+        "jsonwebtoken": "^7.3.0",
+        "lodash": "^4.17.4",
+        "mongodb": "^2.2.23",
+        "mongoose": "^4.8.3",
+        "validator": "^7.0.0"
+    },
+    "devDependencies": {
+        "expect": "^1.20.2",
+        "mocha": "^3.2.0",
+        "nodemon": "^1.11.0",
+        "supertest": "^3.0.0"
+    }
 }
